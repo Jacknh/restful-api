@@ -9,6 +9,8 @@ var url = require('url');
 var { StringDecoder } = require('string_decoder');
 var config = require('./config');
 var fs = require('fs');
+var helpers = require('./lib/helpers');
+var handlers = require('./lib/handlers');
 
 var unifiedServer = function (req, res) {
 
@@ -39,7 +41,7 @@ var unifiedServer = function (req, res) {
       'trimedPath': trimedPath,
       'queryStringObject': queryStringObject,
       'method': method,
-      'payload': buffer
+      'payload': helpers.parseJsonToObject(buffer)
     }
 
     chosenHandler(data, function (statusCode, payload) {
@@ -75,21 +77,7 @@ httpsServer.listen(config.httpsPort, function () {
   console.log(`the server is listening on port ${config.httpsPort} in ${config.envName} mode`);
 })
 
-var handlers = {};
-
-handlers.ping = function (data, callback) {
-  callback(200);
-}
-
-handlers.hello = function (data, callback) {
-  callback(200, { greeting: 'Hello, this is Jack!' });
-}
-
-handlers.notFound = function (data, callback) {
-  callback(404);
-}
-
 var router = {
   'ping': handlers.ping,
-  'hello': handlers.hello
+  'users': handlers.users
 }
