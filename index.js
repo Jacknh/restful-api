@@ -41,7 +41,8 @@ var unifiedServer = function (req, res) {
       'trimedPath': trimedPath,
       'queryStringObject': queryStringObject,
       'method': method,
-      'payload': helpers.parseJsonToObject(buffer)
+      'payload': helpers.parseJsonToObject(buffer),
+      'headers': headers
     }
 
     chosenHandler(data, function (statusCode, payload) {
@@ -79,5 +80,6 @@ httpsServer.listen(config.httpsPort, function () {
 
 var router = {
   'ping': handlers.ping,
-  'users': handlers.users
+  'users': handlers.users,
+  'tokens': handlers.tokens
 }
